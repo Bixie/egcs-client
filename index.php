@@ -21,6 +21,9 @@ function loadConfig(string $configFile): ?array
     return file_exists($configFile) ? json_decode(file_get_contents($configFile), true) : [];
 }
 
+function clearTokens($dataFile) {
+    unlink($dataFile);
+}
 
 $config = loadConfig($configFile);
 
@@ -35,6 +38,7 @@ $task = $_GET['task'] ?? '';
 switch ($task) {
     case 'config';
         storeConfig($configFile, $_POST['config']);
+        clearTokens($dataFile);
         header(sprintf("Location: %s", $client_host));
         break;
     case 'user';

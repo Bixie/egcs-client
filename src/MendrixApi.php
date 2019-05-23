@@ -4,7 +4,9 @@ namespace Egcs;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Uri;
 use kamermans\OAuth2\GrantType\ClientCredentials;
 use kamermans\OAuth2\OAuth2Middleware;
 use kamermans\OAuth2\Persistence\FileTokenPersistence;
@@ -43,7 +45,9 @@ class MendrixApi {
     public function getUser ()
     {
         try {
-            $response = $this->getClient()->get('user');
+            $response = $this->getClient()->get('user', [
+                'cookies' => $this->getCookie(),
+            ]);
             $body = (string)$response->getBody();
             return json_decode($body, true);
         } catch (Exception $e) {
@@ -90,4 +94,12 @@ class MendrixApi {
         }
         return $this->client;
     }
+
+    protected function getCookie (): CookieJar
+    {
+        return CookieJar::fromArray([
+            'XDEBUG_SESSION' => 'PHPSTORM'
+        ], (new Uri($this->api_host))->getHost());
+    }
+
 }

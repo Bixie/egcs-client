@@ -22,6 +22,7 @@ class MendrixApi {
     protected $token_path;
 
     protected $client;
+    protected $cookies = [];
 
     public function __construct (int $client_id, string $client_secret, string $scope = '')
     {
@@ -42,11 +43,17 @@ class MendrixApi {
         return $this;
     }
 
+    public function setCookies (array $cookies): MendrixApi
+    {
+        $this->cookies = $cookies;
+        return $this;
+    }
+
     public function getUser ()
     {
         try {
             $response = $this->getClient()->get('user', [
-                'cookies' => $this->getCookie(),
+                'cookies' => $this->getCookies(),
             ]);
             $body = (string)$response->getBody();
             return json_decode($body, true);
@@ -95,11 +102,9 @@ class MendrixApi {
         return $this->client;
     }
 
-    protected function getCookie (): CookieJar
+    protected function getCookies (): CookieJar
     {
-        return CookieJar::fromArray([
-            'XDEBUG_SESSION' => 'PHPSTORM'
-        ], (new Uri($this->api_host))->getHost());
+        return CookieJar::fromArray($this->cookies, (new Uri($this->api_host))->getHost());
     }
 
 }

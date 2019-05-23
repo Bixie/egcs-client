@@ -30,6 +30,10 @@ $config = loadConfig($configFile);
 $api = new MendrixApi($config['client_id'] ?? 0, $config['client_secret'] ?? '');
 //store in safe location, for this demo the tokens are stored in a public json file!
 $api->setTokenPath($dataFile);
+//set debug cookie
+$api->setCookies([
+    'XDEBUG_SESSION' => 'PHPSTORM',
+]);
 
 $error = null;
 $result = null;

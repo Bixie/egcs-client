@@ -13,7 +13,7 @@ use kamermans\OAuth2\Persistence\FileTokenPersistence;
 
 class MendrixApi {
 
-    protected $api_host = 'http://127.0.0.1:8000';
+    protected $api_host = 'http://api.mendrix.nl';
 
     protected $client_id;
     protected $client_secret;
@@ -59,6 +59,32 @@ class MendrixApi {
             return json_decode($body, true);
         } catch (Exception $e) {
             throw new MendrixApiException('Error in getUser: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    public function getServerdate ()
+    {
+        try {
+            $response = $this->getClient()->get('serverdate', [
+                'cookies' => $this->getCookies(),
+            ]);
+            $body = (string)$response->getBody();
+            return json_decode($body, true);
+        } catch (Exception $e) {
+            throw new MendrixApiException('Error in getServerdate: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    public function getOrderids ()
+    {
+        try {
+            $response = $this->getClient()->get('orderids', [
+                'cookies' => $this->getCookies(),
+            ]);
+            $body = (string)$response->getBody();
+            return json_decode($body, true);
+        } catch (Exception $e) {
+            throw new MendrixApiException('Error in getOrderids: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 

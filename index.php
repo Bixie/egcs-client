@@ -30,7 +30,7 @@ $config = loadConfig($configFile);
 $api = new MendrixApi($config['client_id'] ?? 0, $config['client_secret'] ?? '');
 //store in safe location, for this demo the tokens are stored in a public json file!
 $api->setTokenPath($dataFile);
-//set debug cookie
+//set debug cookie (doesn't work for now)
 $api->setCookies([
     'XDEBUG_SESSION' => 'PHPSTORM',
 ]);
@@ -46,10 +46,25 @@ switch ($task) {
         header(sprintf("Location: %s", $client_host));
         break;
     case 'user';
-
         try {
             $user = $api->getUser();
             $result = compact('user');
+
+        } catch (MendrixApiException $e) {
+            $error = $e->getMessage();
+        }
+        break;
+    case 'serverdate';
+        try {
+            $result = $api->getServerdate();
+
+        } catch (MendrixApiException $e) {
+            $error = $e->getMessage();
+        }
+        break;
+    case 'orderids';
+        try {
+            $result = $api->getOrderIds();
 
         } catch (MendrixApiException $e) {
             $error = $e->getMessage();
@@ -91,6 +106,14 @@ switch ($task) {
 <p>
 
     <a href="?task=user">Toon gebruiker</a>
+</p>
+<p>
+
+    <a href="?task=serverdate">Toon serverdatum</a>
+</p>
+<p>
+
+    <a href="?task=orderids">Toon order ids</a>
 </p>
 <?php if ($error): ?>
 <p>

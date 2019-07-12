@@ -51,7 +51,11 @@ switch ($task) {
             $result = compact('user');
 
         } catch (MendrixApiException $e) {
-            $error = $e->getMessage();
+            if ($data = $e->getResponseData()) {
+                $error = $data['message'];
+            } else {
+                $error = $e->getMessage();
+            }
         }
         break;
     case 'serverdate';
@@ -59,15 +63,35 @@ switch ($task) {
             $result = $api->getServerdate();
 
         } catch (MendrixApiException $e) {
-            $error = $e->getMessage();
+            if ($data = $e->getResponseData()) {
+                $error = $data['message'];
+            } else {
+                $error = $e->getMessage();
+            }
         }
         break;
     case 'orderids';
         try {
-            $result = $api->getOrderIds();
+            $result = $api->getOrderIds('2019-01-01T00:00:00+02:00', '2019-03-01T00:00:00+02:00', 110, -1);
 
         } catch (MendrixApiException $e) {
-            $error = $e->getMessage();
+            if ($data = $e->getResponseData()) {
+                $error = $data['message'];
+            } else {
+                $error = $e->getMessage();
+            }
+        }
+        break;
+    case 'orderbyids';
+        try {
+            $result = $api->getOrderByIds();
+
+        } catch (MendrixApiException $e) {
+            if ($data = $e->getResponseData()) {
+                $error = $data['message'];
+            } else {
+                $error = $e->getMessage();
+            }
         }
         break;
     default;
@@ -114,6 +138,10 @@ switch ($task) {
 <p>
 
     <a href="?task=orderids">Toon order ids</a>
+</p>
+<p>
+
+    <a href="?task=orderbyids">Laad orders met ids</a>
 </p>
 <?php if ($error): ?>
 <p>

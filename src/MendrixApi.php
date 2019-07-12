@@ -2,6 +2,7 @@
 
 namespace Egcs;
 
+use DateTime;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
@@ -75,16 +76,30 @@ class MendrixApi {
         }
     }
 
-    public function getOrderids ()
+    public function getOrderIds (string $from, string $to, int $clientNo, int $operatorId = -1)
     {
         try {
             $response = $this->getClient()->get('orderids', [
                 'cookies' => $this->getCookies(),
+                'query' => compact('from', 'to', 'clientNo', 'operatorId'),
             ]);
             $body = (string)$response->getBody();
             return json_decode($body, true);
         } catch (Exception $e) {
             throw new MendrixApiException('Error in getOrderids: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    public function getOrderByIds ()
+    {
+        try {
+            $response = $this->getClient()->get('orderbyids', [
+                'cookies' => $this->getCookies(),
+            ]);
+            $body = (string)$response->getBody();
+            return json_decode($body, true);
+        } catch (Exception $e) {
+            throw new MendrixApiException('Error in getOrderbyids: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -115,7 +130,8 @@ class MendrixApi {
                     $oauth->setTokenPersistence($token_persistence);
                 }
                 $stack = HandlerStack::create();
-                $stack->push($oauth);// This is the normal Guzzle client that you use in your application
+                $stack->push($oauth);
+                // This is the normal Guzzle client that you use in your application
                 $this->client = new Client([
                     'base_uri' => $this->api_host . '/api/',
                     'handler' => $stack,

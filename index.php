@@ -80,11 +80,24 @@ switch ($task) {
             } else {
                 $error = $e->getMessage();
             }
+            $error = $e->getMessage();
         }
         break;
     case 'orderbyids';
         try {
             $result = $api->getOrderByIds();
+
+        } catch (MendrixApiException $e) {
+            if ($data = $e->getResponseData()) {
+                $error = $data['message'];
+            } else {
+                $error = $e->getMessage();
+            }
+        }
+        break;
+    case 'tracesgoods';
+        try {
+            $result = $api->getTracesGoods();
 
         } catch (MendrixApiException $e) {
             if ($data = $e->getResponseData()) {
@@ -142,6 +155,10 @@ switch ($task) {
 <p>
 
     <a href="?task=orderbyids">Laad orders met ids</a>
+</p>
+<p>
+
+    <a href="?task=tracesgoods">Laad traces</a>
 </p>
 <?php if ($error): ?>
 <p>

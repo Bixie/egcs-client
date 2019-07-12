@@ -103,6 +103,19 @@ class MendrixApi {
         }
     }
 
+    public function getTracesGoods ()
+    {
+        try {
+            $response = $this->getClient()->get('tracesgoods', [
+                'cookies' => $this->getCookies(),
+            ]);
+            $body = (string)$response->getBody();
+            return json_decode($body, true);
+        } catch (Exception $e) {
+            throw new MendrixApiException('Error in getTracesGoods: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
     /**
      * https://packagist.org/packages/kamermans/guzzle-oauth2-subscriber
      * @return Client

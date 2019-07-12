@@ -2,7 +2,6 @@
 
 namespace Egcs;
 
-use DateTime;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;

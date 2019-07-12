@@ -22,6 +22,9 @@ class MendrixApiException extends \Exception
 
     public function getResponseData (): ?array
     {
+        if (!$this->hasResponse()) {
+            return null;
+        }
         $body = (string)$this->getResponse()->getBody();
         return json_decode($body, true);
     }

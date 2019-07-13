@@ -65,7 +65,7 @@ class MendrixApi {
     public function getServerdate ()
     {
         try {
-            $response = $this->getClient()->get('serverdate', [
+            $response = $this->getClient()->get('mendrix/serverdate', [
                 'cookies' => $this->getCookies(),
             ]);
             $body = (string)$response->getBody();
@@ -78,7 +78,7 @@ class MendrixApi {
     public function getOrderIds (string $from, string $to, int $clientNo, int $operatorId = -1)
     {
         try {
-            $response = $this->getClient()->get('orderids', [
+            $response = $this->getClient()->get('mendrix/orderids', [
                 'cookies' => $this->getCookies(),
                 'query' => compact('from', 'to', 'clientNo', 'operatorId'),
             ]);
@@ -92,7 +92,7 @@ class MendrixApi {
     public function getOrderByIds ()
     {
         try {
-            $response = $this->getClient()->get('orderbyids', [
+            $response = $this->getClient()->get('mendrix/orderbyids', [
                 'cookies' => $this->getCookies(),
             ]);
             $body = (string)$response->getBody();
@@ -105,7 +105,7 @@ class MendrixApi {
     public function getTracesGoods ()
     {
         try {
-            $response = $this->getClient()->get('tracesgoods', [
+            $response = $this->getClient()->get('mendrix/tracesgoods', [
                 'cookies' => $this->getCookies(),
             ]);
             $body = (string)$response->getBody();

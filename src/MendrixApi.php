@@ -13,7 +13,7 @@ use kamermans\OAuth2\Persistence\FileTokenPersistence;
 
 class MendrixApi {
 
-    protected $api_host = 'http://api.mendrix.nl';
+    protected $api_host = 'http://api.mendrix.test';
 
     protected $client_id;
     protected $client_secret;
@@ -75,30 +75,17 @@ class MendrixApi {
         }
     }
 
-    public function getOrderIds (string $from, string $to, int $clientNo, int $operatorId = -1)
+    public function getOrders (string $from, string $to, int $page = 1, int $limit = 10, int $clientNo = -1, int $operatorId = -1)
     {
         try {
-            $response = $this->getClient()->get('mendrix/orderids', [
+            $response = $this->getClient()->get('mendrix/orders', [
                 'cookies' => $this->getCookies(),
-                'query' => compact('from', 'to', 'clientNo', 'operatorId'),
+                'query' => compact('from', 'to', 'clientNo', 'page', 'limit', 'operatorId'),
             ]);
             $body = (string)$response->getBody();
             return json_decode($body, true);
         } catch (Exception $e) {
             throw new MendrixApiException('Error in getOrderids: ' . $e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    public function getOrderByIds ()
-    {
-        try {
-            $response = $this->getClient()->get('mendrix/orderbyids', [
-                'cookies' => $this->getCookies(),
-            ]);
-            $body = (string)$response->getBody();
-            return json_decode($body, true);
-        } catch (Exception $e) {
-            throw new MendrixApiException('Error in getOrderbyids: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 

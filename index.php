@@ -217,7 +217,7 @@ switch ($task) {
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Client Id</th>
+                    <th scope="col">Client Name</th>
                     <th scope="col">Client Number</th>
                     <th scope="col">Order Type</th>
                 </tr>
@@ -226,7 +226,7 @@ switch ($task) {
                 <?php foreach ($result['items'] as $order): ?>
                 <tr>
                     <th rowspan="2" scope="col"><?= $order['OrderId']['Id'] ?></th>
-                    <td><?= $order['ClientId']['Id'] ?></td>
+                    <td><?= $order['client'] ? $order['client']['Address']['Name'] : 'Onbekend' ?></td>
                     <td><?= $order['ClientNumber'] ?></td>
                     <td><?= $order['OrderType'] ?></td>
 
@@ -276,7 +276,7 @@ switch ($task) {
                 </tbody>
             </table>
             <p>
-            <pre><?php var_dump($result) ?></pre>
+            <pre><?php var_dump($result['items']) ?></pre>
             </p>
         <?php else: ?>
             <p>

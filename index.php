@@ -206,7 +206,7 @@ switch ($task) {
                 </div>
                 <div class="col-sm text-center form-inline">
                     Pagina <select class="form-control-sm mx-1"
-                                   onchange="window.location.href = window.location.href.replace(/&page=\d/, '') + '&page=' + this.value">
+                                   onchange="window.location.href = window.location.href.replace(/&page=\d+/, '') + '&page=' + this.value">
                         <?php for ($p = 1;$p <= ceil($result['total']/$result['limit']); $p++): ?>
                             <option value="<?=$p?>"<?= $p == $result['page']?' selected':''?>><?=$p?></option>
                         <?php endfor; ?>
@@ -251,23 +251,33 @@ switch ($task) {
                                 <td><?= round((float)$article['Price'], 2) ?></td>
                             </tr>
                             <?php endforeach; ?>
-                            <?php foreach ($order['Goods'] as $article): ?>
+                            <?php foreach ($order['Goods'] as $good): ?>
                             <tr>
                                 <th scope="row">Goods</th>
-                                <td><?= $article['Barcode'] ?></td>
-                                <td><?= $article['Packing']['Name'] ?></td>
+                                <td><?= $good['Barcode'] ?></td>
+                                <td><?= $good['Packing']['Name'] ?></td>
                                 <td></td>
                             </tr>
+                                <?php foreach (array_filter($order['traces'], function ($trace) use ($good) {
+                                    return $trace['GoodId'] === $good['GoodId']['Id'];
+                                }) as $trace): ?>
+                                    <tr>
+                                        <th></th>
+                                        <td>Trace</td>
+                                        <td><?= $trace['Description'] ?></td>
+                                        <td><?= (new DateTime($trace['Moment']))->format('d-m-Y H:i:s') ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
                             <?php endforeach; ?>
                             <?php foreach ($order['Tasks'] as $item): ?>
                             <tr>
-                                <th scope="row">Task</th>
+                                <th scope="row">Taak - <?= $item['TaskTypeId']['Id'] == 1 ? 'halen' : 'brengen'?></th>
                                 <td><?= $item['GoodDescription'] ?></td>
                                 <td><?= $item['Address']['Name'] ?></td>
                                 <td><?= $item['Address']['Place'] ?></td>
                             </tr>
                             <?php endforeach; ?>
-<!--                            <tr><td colspan="4">--><?php ////var_dump($order['GoodsToTasks']) ?><!--</td></tr>-->
+<!--                            <tr><td colspan="4">--><?php //var_dump($order['Tasks']) ?><!--</td></tr>-->
                             </tbody>
                         </table>
                     </td>

@@ -89,6 +89,20 @@ class MendrixApi {
         }
     }
 
+    public function createOrder (array $data)
+    {
+        try {
+            $response = $this->getClient()->post('mendrix/orders', [
+                'cookies' => $this->getCookies(),
+                'form_params' => $data,
+            ]);
+            $body = (string)$response->getBody();
+            return json_decode($body, true);
+        } catch (Exception $e) {
+            throw new MendrixApiException('Error in createOrder: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
     public function getTracesGoods ()
     {
         try {

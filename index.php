@@ -88,9 +88,22 @@ switch ($task) {
             $error = $e->getMessage();
         }
         break;
-    case 'tracesgoods';
+    case 'create_order';
         try {
-            $result = $api->getTracesGoods();
+            $result = $api->createOrder(json_decode('{
+                "Contact": "Contact Persoon",
+                "Notes": "Notities",
+                "DeliveryAddress": {
+                    "Name": "Sjaak Test",
+                    "Premise": "expeditie",
+                    "Street": "Straatweg",
+                    "Number": 123,
+                    "PostalCode": "1234 AB",
+                    "Place": "Ede",
+                    "Country": "Nederland",
+                    "CountryCode": "NL"		
+                }
+            }', true));
 
         } catch (MendrixApiException $e) {
             if ($data = $e->getResponseData()) {
@@ -189,8 +202,8 @@ switch ($task) {
            onclick="document.nav.task.value='serverdate';document.nav.submit();return false">Toon serverdatum</a>
         <a class="nav-link <?= $task == 'orders' ? 'active' : '' ?>" href="#"
            onclick="document.nav.task.value='orders';document.nav.submit();return false">Toon orders</a>
-        <a class="nav-link <?= $task == 'tracesgoods' ? 'active' : '' ?> disabled" href="#"
-           onclick="document.nav.task.value='tracesgoods';document.nav.submit();return false">Laad traces</a>
+        <a class="nav-link <?= $task == 'create_order' ? 'active' : '' ?> disabled" href="#"
+           onclick="document.nav.task.value='create_order';document.nav.submit();return false">Creëer order</a>
     </nav>
 
     <?php if ($error): ?>

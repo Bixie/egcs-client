@@ -85,7 +85,6 @@ switch ($task) {
             } else {
                 $error = $e->getMessage();
             }
-            $error = $e->getMessage();
         }
         break;
     case 'create_order';

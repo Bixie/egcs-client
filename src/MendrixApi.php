@@ -13,7 +13,7 @@ use kamermans\OAuth2\Persistence\FileTokenPersistence;
 
 class MendrixApi {
 
-    protected $api_host = 'http://api.mendrix.test';
+    protected $api_host = 'https://www.egcs-mendrix.nl';
 
     protected $client_id;
     protected $client_secret;

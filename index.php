@@ -39,7 +39,7 @@ $api->setCookies([
 $error = null;
 $result = null;
 
-$task = $_GET['task'] ?? '';
+$task = $_GET['task'] ?? $_POST['task'] ?? '';
 $from = $_GET['from'] ?? (new DateTime())->sub(new DateInterval('P1W'))->format('Y-m-d');
 $to = $_GET['to'] ?? (new DateTime())->format('Y-m-d');
 $page = (int)($_GET['page'] ?? 1);
@@ -87,22 +87,15 @@ switch ($task) {
             }
         }
         break;
+    case 'order_form';
+        //
+        break;
     case 'create_order';
+
+        $input = $_POST['order'];
+
         try {
-            $result = $api->createOrder(json_decode('{
-                "Contact": "Contact Persoon",
-                "Notes": "Notities",
-                "DeliveryAddress": {
-                    "Name": "Sjaak Test",
-                    "Premise": "expeditie",
-                    "Street": "Straatweg",
-                    "Number": 123,
-                    "PostalCode": "1234 AB",
-                    "Place": "Ede",
-                    "Country": "Nederland",
-                    "CountryCode": "NL"		
-                }
-            }', true));
+            $result = $api->createOrder($input);
 
         } catch (MendrixApiException $e) {
             if ($data = $e->getResponseData()) {
@@ -201,8 +194,8 @@ switch ($task) {
            onclick="document.nav.task.value='serverdate';document.nav.submit();return false">Toon serverdatum</a>
         <a class="nav-link <?= $task == 'orders' ? 'active' : '' ?>" href="#"
            onclick="document.nav.task.value='orders';document.nav.submit();return false">Toon orders</a>
-        <a class="nav-link <?= $task == 'create_order' ? 'active' : '' ?> disabled" href="#"
-           onclick="document.nav.task.value='create_order';document.nav.submit();return false">Creëer order</a>
+        <a class="nav-link <?= $task == 'order_form' ? 'active' : '' ?>" href="#"
+           onclick="document.nav.task.value='order_form';document.nav.submit();return false">Creëer order</a>
     </nav>
 
     <?php if ($error): ?>
@@ -305,6 +298,167 @@ switch ($task) {
             <pre><?php var_dump($result) ?></pre>
             </p>
         <?php endif; ?>
+    <?php endif; ?>
+    <?php if ($task == 'order_form'): ?>
+        <form name="order_form" method="post" action="index.php" class="mt-4">
+            <h4>Order</h4>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Contact</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Contact]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Notes</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Notes]" value="" class="form-control"/>
+                </div>
+            </div>
+            <h4>Ophalen</h4>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Instructions</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[PickUp][Instructions]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">ReferenceOur</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[PickUp][ReferenceOur]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">ReferenceYour</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[PickUp][ReferenceYour]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[PickUp][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[PickUp][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm" class="form-control"/>
+                </div>
+            </div>
+            <h4>Afleveren</h4>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Address Name *</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Address][Name]" required value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Address Premise</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Address][Premise]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Address Street *</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Address][Street]" required value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Address Number</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Address][Number]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Address PostalCode *</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Address][PostalCode]" required value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Address Place *</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Address][Place]" required value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Address Country *</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Address][Country]" required value="Nederland" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Address CountryCode *</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Address][CountryCode]" required value="NL" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">ContactName</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][ContactName]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Instructions</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Instructions]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">ReferenceOur</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][ReferenceOur]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">ReferenceYour</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][ReferenceYour]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Connectivity Phone</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Connectivity][Phone]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Connectivity Mobile</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Connectivity][Mobile]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Connectivity Email</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Connectivity][Email]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Connectivity Web</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Connectivity][Web]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[Delivery][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm" class="form-control"/>
+                </div>
+            </div>
+            <p>
+                <button type="submit" class="btn btn-success">Verzenden</button>
+            </p>
+            <input type="hidden" name="task" value="create_order"/>
+        </form>
     <?php endif; ?>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

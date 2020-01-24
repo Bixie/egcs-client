@@ -322,7 +322,7 @@ switch ($task) {
                 </div>
             </div>
             <h4>Goederen</h4>
-            <small>In dit voorbeeld slechts één product mogelijk, api ondersteund meerdere</small>
+            <small>In dit voorbeeld slechts één product mogelijk, api ondersteunt meerdere</small>
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Packing *</label>
                 <div class="col-sm-8">

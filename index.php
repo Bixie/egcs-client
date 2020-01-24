@@ -37,6 +37,7 @@ $api->setCookies([
 ]);
 
 $error = null;
+$errors = null;
 $result = null;
 
 $task = $_GET['task'] ?? $_POST['task'] ?? '';
@@ -100,6 +101,7 @@ switch ($task) {
         } catch (MendrixApiException $e) {
             if ($data = $e->getResponseData()) {
                 $error = $data['message'];
+                $errors = $data['errors'] ?? [];
             } else {
                 $error = $e->getMessage();
             }
@@ -201,6 +203,11 @@ switch ($task) {
     <?php if ($error): ?>
         <p>
             <strong class="text-danger"><?= $error ?></strong>
+        </p>
+    <?php endif; ?>
+    <?php if ($errors): ?>
+        <p>
+            <pre><?= json_encode($errors, JSON_PRETTY_PRINT) ?></pre>
         </p>
     <?php endif; ?>
     <?php if ($result): ?>

@@ -4,6 +4,7 @@
 namespace Egcs;
 
 
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 
@@ -12,7 +13,9 @@ class MendrixApiException extends \Exception
 
     public function hasResponse (): bool
     {
-        return $prev = $this->getPrevious() and $prev instanceof ServerException and $prev->hasResponse();
+        return $prev = $this->getPrevious() and
+            ($prev instanceof ServerException || $prev instanceof ClientException) and
+            $prev->hasResponse();
     }
 
     public function getResponse (): ?Response

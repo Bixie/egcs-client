@@ -31,6 +31,21 @@ try {
     $result = $api->createOrder([
         'Contact' => 'Contact Persoon Logique',
         'Notes' => 'Notities Logique',
+        'GoodList' => [
+            [
+                'Packing' => 'Produkt',
+                'Barcode' => '',
+                'Comments' => 'Comment',
+                'Depth' => '1',
+                'Height' => '1',
+                'Width' => '1',
+                'Parts' => '1',
+                'Volume' => '1',
+                'VolumeWeight' => '1',
+                'ArticleWeight' => '1',
+                'Weight' => '1'
+            ]
+        ],
         'PickUp' => [
             'Instructions' => 'Ophaalinstructies',
             'ReferenceOur' => '#8746',

@@ -324,9 +324,9 @@ switch ($task) {
             <h4>Goederen</h4>
             <small>In dit voorbeeld slechts één product mogelijk, api ondersteund meerdere</small>
             <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Packing</label>
+                <label class="col-sm-4 col-form-label">Packing *</label>
                 <div class="col-sm-8">
-                    <input type="text" name="order[GoodList][0][Packing]" value="" class="form-control"/>
+                    <input type="text" name="order[GoodList][0][Packing]" value="" class="form-control" required/>
                 </div>
             </div>
             <div class="form-group row">

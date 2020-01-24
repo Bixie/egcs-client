@@ -94,6 +94,7 @@ switch ($task) {
     case 'create_order';
 
         $input = $_POST['order'];
+        echo '<pre>'. json_encode($input, JSON_PRETTY_PRINT). '</pre>';
 
         try {
             $result = $api->createOrder($input);
@@ -321,6 +322,75 @@ switch ($task) {
                     <input type="text" name="order[Notes]" value="" class="form-control"/>
                 </div>
             </div>
+            <h4>Goederen</h4>
+            <small>In dit voorbeeld slechts één product mogelijk, api ondersteund meerdere</small>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Packing</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[GoodList][0][Packing]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">BarCode</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[GoodList][0][Barcode]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Comments</label>
+                <div class="col-sm-8">
+                    <input type="text" name="order[GoodList][0][Comments]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Depth</label>
+                <div class="col-sm-8">
+                    <input type="number" step="0.01" name="order[GoodList][0][Depth]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Height</label>
+                <div class="col-sm-8">
+                    <input type="number" step="0.01" name="order[GoodList][0][Height]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Width</label>
+                <div class="col-sm-8">
+                    <input type="number" step="0.01" name="order[GoodList][0][Width]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Parts</label>
+                <div class="col-sm-8">
+                    <input type="number" step="1" name="order[GoodList][0][Parts]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Volume</label>
+                <div class="col-sm-8">
+                    <input type="number" step="0.01" name="order[GoodList][0][Volume]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">VolumeWeight</label>
+                <div class="col-sm-8">
+                    <input type="number" step="0.001" name="order[GoodList][0][VolumeWeight]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">ArticleWeight</label>
+                <div class="col-sm-8">
+                    <input type="number" step="0.001" name="order[GoodList][0][ArticleWeight]" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Weight</label>
+                <div class="col-sm-8">
+                    <input type="number" step="0.001" name="order[GoodList][0][Weight]" value="" class="form-control"/>
+                </div>
+            </div>
+
             <h4>Ophalen</h4>
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Instructions</label>
@@ -343,13 +413,13 @@ switch ($task) {
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
                 <div class="col-sm-8">
-                    <input type="text" name="order[PickUp][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm" class="form-control"/>
+                    <input type="text" name="order[PickUp][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm:ss" class="form-control"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
                 <div class="col-sm-8">
-                    <input type="text" name="order[PickUp][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm" class="form-control"/>
+                    <input type="text" name="order[PickUp][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm:ss" class="form-control"/>
                 </div>
             </div>
             <h4>Afleveren</h4>
@@ -452,13 +522,13 @@ switch ($task) {
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
                 <div class="col-sm-8">
-                    <input type="text" name="order[Delivery][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm" class="form-control"/>
+                    <input type="text" name="order[Delivery][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm:ss" class="form-control"/>
                 </div>
             </div>
             <div class="form-group row">
                 <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
                 <div class="col-sm-8">
-                    <input type="text" name="order[Delivery][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm" class="form-control"/>
+                    <input type="text" name="order[Delivery][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm:ss" class="form-control"/>
                 </div>
             </div>
             <p>

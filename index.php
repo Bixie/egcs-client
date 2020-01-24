@@ -94,7 +94,6 @@ switch ($task) {
     case 'create_order';
 
         $input = $_POST['order'];
-        echo '<pre>'. json_encode($input, JSON_PRETTY_PRINT). '</pre>';
 
         try {
             $result = $api->createOrder($input);

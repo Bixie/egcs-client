@@ -378,9 +378,9 @@ switch ($task) {
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-4 col-form-label">ArticleWeight</label>
+                <label class="col-sm-4 col-form-label">ArticleWeight *</label>
                 <div class="col-sm-8">
-                    <input type="number" step="0.001" name="order[GoodList][0][ArticleWeight]" value="" class="form-control"/>
+                    <input type="number" step="0.001" name="order[GoodList][0][ArticleWeight]" value="" class="form-control" required/>
                 </div>
             </div>
             <div class="form-group row">

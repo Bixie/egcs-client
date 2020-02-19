@@ -33,7 +33,7 @@ try {
         'Notes' => 'Notities Logique',
         'GoodList' => [
             [
-                'Packing' => 'Produkt',
+                'Packing' => 'Produkt', //required
                 'Barcode' => '',
                 'Comments' => 'Comment',
                 'Depth' => '1',
@@ -42,7 +42,7 @@ try {
                 'Parts' => '1',
                 'Volume' => '1',
                 'VolumeWeight' => '1',
-                'ArticleWeight' => '1',
+                'ArticleWeight' => '1', //required
                 'Weight' => '1'
             ]
         ],

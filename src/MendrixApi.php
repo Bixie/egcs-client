@@ -116,6 +116,21 @@ class MendrixApi {
         }
     }
 
+    public function getLabel (int $orderId)
+    {
+        try {
+            $response = $this->getClient()->get('mendrix/orderlabel', [
+                'cookies' => $this->getCookies(),
+                'query' => [
+                    'orderId' => $orderId,
+                ],
+            ]);
+            return $response->getBody();
+        } catch (Exception $e) {
+            throw new MendrixApiException('Error in getLabel: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
     /**
      * https://packagist.org/packages/kamermans/guzzle-oauth2-subscriber
      * @return Client

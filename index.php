@@ -107,6 +107,29 @@ switch ($task) {
             }
         }
         break;
+    case 'get_order_label';
+        $orderId = $_POST['orderId'];
+        if ($orderId) {
+            try {
+                $response = $api->getLabel($orderId);
+
+                header("Content-Disposition: attachment; filename=\"Collo-etiket-$orderId.pdf\"");
+                header("Content-Type: application/pdf");
+                header("Content-Length: " . $response->getSize());
+                echo $response->getContents();
+                die();
+            } catch (MendrixApiException $e) {
+                if ($data = $e->getResponseData()) {
+                    $error = $data['message'];
+                    $errors = $data['errors'] ?? [];
+                } else {
+                    $error = $e->getMessage();
+                }
+            }
+        } else {
+            $error = 'OrderId verplicht';
+        }
+        break;
     default;
         break;
 }
@@ -198,6 +221,8 @@ switch ($task) {
            onclick="document.nav.task.value='orders';document.nav.submit();return false">Toon orders</a>
         <a class="nav-link <?= $task == 'order_form' ? 'active' : '' ?>" href="#"
            onclick="document.nav.task.value='order_form';document.nav.submit();return false">Creëer order</a>
+        <a class="nav-link <?= $task == 'order_label' ? 'active' : '' ?>" href="#"
+           onclick="document.nav.task.value='order_label';document.nav.submit();return false">Order label</a>
     </nav>
 
     <?php if ($error): ?>
@@ -534,6 +559,22 @@ switch ($task) {
                 <button type="submit" class="btn btn-success">Verzenden</button>
             </p>
             <input type="hidden" name="task" value="create_order"/>
+        </form>
+    <?php endif; ?>
+    <?php if ($task == 'order_label'): ?>
+        <form name="order_form" method="post" action="index.php" class="mt-4">
+            <h4>Order label</h4>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">OrderId</label>
+                <div class="col-sm-8">
+                    <input type="text" name="orderId" value="" class="form-control"/>
+                </div>
+            </div>
+            <p class="text-right">
+                <button type="submit" class="btn btn-success">PDF downloaden</button>
+            </p>
+            <input type="hidden" name="task" value="get_order_label"/>
         </form>
     <?php endif; ?>
 </div>

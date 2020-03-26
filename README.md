@@ -13,7 +13,7 @@ $user = $api->getServerdate();
 $user = $api->getUser();
 ```
 
-View orders
+#### View orders
 
 ```php
 $from = '2020-01-04T23:00:00+01:00';
@@ -24,7 +24,7 @@ $orders = $api->getOrders($from, $to, $page, $limit);
 //returns ['total', 'page', 'limit', 'items',]
 ```
 
-Create new order
+#### Create new order
 
 ```php
 try {
@@ -89,10 +89,23 @@ try {
         $error = $e->getMessage();
     }
 }
-
 ```
 
-Use with file-cache for tokens:
+#### Get order label
+
+```php
+$orderId = 1234;
+$response = $api->getLabel($orderId);
+
+header("Content-Disposition: attachment; filename=\"Collo-etiket-$orderId.pdf\"");
+header("Content-Type: application/pdf");
+header("Content-Length: " . $response->getSize());
+echo $response->getContents();
+die();
+//returns pdf file stream
+```
+
+#### Use with file-cache for tokens:
 
 ```php
 $api->setTokenPath('secure/path/tokens.json');

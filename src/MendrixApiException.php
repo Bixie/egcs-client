@@ -20,7 +20,7 @@ class MendrixApiException extends \Exception
 
     public function getResponse (): ?Response
     {
-        return $this->hasResponse() ? $this->getPrevious()->getResponse() : null;
+        return $this->hasResponse() ? $this->getPrevious()->getResponseBody() : null;
     }
 
     public function getResponseData (): ?array

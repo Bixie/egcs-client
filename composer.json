@@ -1,4 +1,5 @@
 {
+    "name": "bixie/egcs-client",
     "require": {
         "guzzlehttp/guzzle": "^6.3",
         "kamermans/guzzle-oauth2-subscriber": "^1.0"

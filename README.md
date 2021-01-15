@@ -91,6 +91,14 @@ try {
 }
 ```
 
+#### Get order details
+
+```php
+$orderId = 1234;
+$order = $api->getOrderById($orderId);
+//returns complete Mendrix order object
+```
+
 #### Get order label
 
 ```php
@@ -103,6 +111,16 @@ header("Content-Length: " . $response->getSize());
 echo $response->getContents();
 die();
 //returns pdf file stream
+```
+
+#### Get order Track And Trace
+
+```php
+$orderId = 1234;
+$taskType = 'delivery'; //all, pickup or delivery
+$order = $api->getOrderTrackAndTrace($orderId, $taskType);
+//returns array of track and trace urls, task types and goods descriptions 
+// [['type', 'packing', 'trace_url',],]
 ```
 
 #### Use with file-cache for tokens:

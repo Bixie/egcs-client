@@ -15,7 +15,7 @@ class MendrixApiException extends \Exception
     {
         return $prev = $this->getPrevious() and
             ($prev instanceof ServerException || $prev instanceof ClientException) and
-            $prev->hasResponse();
+            $prev->hasResponse() and method_exists($prev, 'getResponseBody');
     }
 
     public function getResponse (): ?Response

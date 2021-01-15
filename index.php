@@ -589,9 +589,9 @@ switch ($task) {
                 </div>
             </div>
             <div class="form-group row">
-                <label class="col-sm-4 col-form-label">Requested DateTimeBegin</label>
+                <label class="col-sm-4 col-form-label">Requested DateTimeEnd</label>
                 <div class="col-sm-8">
-                    <input type="text" name="order[Delivery][Requested][DateTimeBegin]" value="" placeholder="jjjj-mm-ddThh:mm:ss" class="form-control"/>
+                    <input type="text" name="order[Delivery][Requested][DateTimeEnd]" value="" placeholder="jjjj-mm-ddThh:mm:ss" class="form-control"/>
                 </div>
             </div>
             <p>

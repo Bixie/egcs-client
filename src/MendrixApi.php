@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\Uri;
 use kamermans\OAuth2\GrantType\ClientCredentials;
 use kamermans\OAuth2\OAuth2Middleware;
 use kamermans\OAuth2\Persistence\FileTokenPersistence;
+use Psr\Http\Message\StreamInterface;
 
 class MendrixApi {
 
@@ -49,7 +50,7 @@ class MendrixApi {
         return $this;
     }
 
-    public function getUser ()
+    public function getUser (): ?array
     {
         try {
             $response = $this->getClient()->get('user', [
@@ -62,7 +63,7 @@ class MendrixApi {
         }
     }
 
-    public function getServerdate ()
+    public function getServerdate (): ?array
     {
         try {
             $response = $this->getClient()->get('mendrix/serverdate', [
@@ -75,7 +76,9 @@ class MendrixApi {
         }
     }
 
-    public function getOrders (string $from, string $to, int $page = 1, int $limit = 10, int $clientNo = -1, int $operatorId = -1)
+    public function getOrders (
+        string $from, string $to, int $page = 1, int $limit = 10, int $clientNo = -1, int $operatorId = -1
+    ): ?array
     {
         try {
             $response = $this->getClient()->get('mendrix/orders', [
@@ -89,7 +92,7 @@ class MendrixApi {
         }
     }
 
-    public function createOrder (array $data)
+    public function createOrder (array $data): ?array
     {
         try {
             $response = $this->getClient()->post('mendrix/orders', [
@@ -103,20 +106,23 @@ class MendrixApi {
         }
     }
 
-    public function getTracesGoods ()
+    public function getOrderById (int $orderId): ?array
     {
         try {
-            $response = $this->getClient()->get('mendrix/tracesgoods', [
+            $response = $this->getClient()->get('mendrix/order', [
                 'cookies' => $this->getCookies(),
+                'query' => [
+                    'orderId' => $orderId,
+                ],
             ]);
             $body = (string)$response->getBody();
             return json_decode($body, true);
         } catch (Exception $e) {
-            throw new MendrixApiException('Error in getTracesGoods: ' . $e->getMessage(), $e->getCode(), $e);
+            throw new MendrixApiException('Error in getOrderById: ' . $e->getMessage(), $e->getCode(), $e);
         }
     }
 
-    public function getLabel (int $orderId)
+    public function getLabel (int $orderId): StreamInterface
     {
         try {
             $response = $this->getClient()->get('mendrix/orderlabel', [
@@ -131,12 +137,29 @@ class MendrixApi {
         }
     }
 
+    public function getOrderTrackAndTrace (int $orderId, string $taskType = 'delivery'): ?array
+    {
+        try {
+            $response = $this->getClient()->get('mendrix/ordertracktrace', [
+                'cookies' => $this->getCookies(),
+                'query' => [
+                    'orderId' => $orderId,
+                    'taskType' => $taskType, //all, delivery or pickup
+                ],
+            ]);
+            $body = (string)$response->getBody();
+            return json_decode($body, true);
+        } catch (Exception $e) {
+            throw new MendrixApiException('Error in getOrderTrackAndTrace: ' . $e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
     /**
      * https://packagist.org/packages/kamermans/guzzle-oauth2-subscriber
      * @return Client
      * @throws MendrixApiException
      */
-    protected function getClient ()
+    protected function getClient (): Client
     {
         if (!isset($this->client)) {
 

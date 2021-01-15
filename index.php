@@ -107,6 +107,23 @@ switch ($task) {
             }
         }
         break;
+    case 'get_order_details';
+        $orderId = $_POST['orderId'];
+        if ($orderId) {
+            try {
+                $result = $api->getOrderById($orderId);
+            } catch (MendrixApiException $e) {
+                if ($data = $e->getResponseData()) {
+                    $error = $data['message'];
+                    $errors = $data['errors'] ?? [];
+                } else {
+                    $error = $e->getMessage();
+                }
+            }
+        } else {
+            $error = 'OrderId verplicht';
+        }
+        break;
     case 'get_order_label';
         $orderId = $_POST['orderId'];
         if ($orderId) {
@@ -118,6 +135,24 @@ switch ($task) {
                 header("Content-Length: " . $response->getSize());
                 echo $response->getContents();
                 die();
+            } catch (MendrixApiException $e) {
+                if ($data = $e->getResponseData()) {
+                    $error = $data['message'];
+                    $errors = $data['errors'] ?? [];
+                } else {
+                    $error = $e->getMessage();
+                }
+            }
+        } else {
+            $error = 'OrderId verplicht';
+        }
+        break;
+    case 'get_order_track_trace';
+        $orderId = $_POST['orderId'];
+        $taskType = $_POST['taskType'] ?? 'delivery';
+        if ($orderId) {
+            try {
+                $result = $api->getOrderTrackAndTrace($orderId, $taskType);
             } catch (MendrixApiException $e) {
                 if ($data = $e->getResponseData()) {
                     $error = $data['message'];
@@ -221,8 +256,12 @@ switch ($task) {
            onclick="document.nav.task.value='orders';document.nav.submit();return false">Toon orders</a>
         <a class="nav-link <?= $task == 'order_form' ? 'active' : '' ?>" href="#"
            onclick="document.nav.task.value='order_form';document.nav.submit();return false">Creëer order</a>
+        <a class="nav-link <?= $task == 'order_details' ? 'active' : '' ?>" href="#"
+           onclick="document.nav.task.value='order_details';document.nav.submit();return false">Order details</a>
         <a class="nav-link <?= $task == 'order_label' ? 'active' : '' ?>" href="#"
            onclick="document.nav.task.value='order_label';document.nav.submit();return false">Order label</a>
+        <a class="nav-link <?= $task == 'order_track_trace' ? 'active' : '' ?>" href="#"
+           onclick="document.nav.task.value='order_track_trace';document.nav.submit();return false">Order Track & Trace</a>
     </nav>
 
     <?php if ($error): ?>
@@ -561,6 +600,22 @@ switch ($task) {
             <input type="hidden" name="task" value="create_order"/>
         </form>
     <?php endif; ?>
+    <?php if ($task == 'order_details'): ?>
+        <form name="order_form" method="post" action="index.php" class="mt-4">
+            <h4>Order details</h4>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">OrderId</label>
+                <div class="col-sm-8">
+                    <input type="text" name="orderId" value="" class="form-control"/>
+                </div>
+            </div>
+            <p class="text-right">
+                <button type="submit" class="btn btn-success">Details ophalen</button>
+            </p>
+            <input type="hidden" name="task" value="get_order_details"/>
+        </form>
+    <?php endif; ?>
     <?php if ($task == 'order_label'): ?>
         <form name="order_form" method="post" action="index.php" class="mt-4">
             <h4>Order label</h4>
@@ -577,6 +632,33 @@ switch ($task) {
             <input type="hidden" name="task" value="get_order_label"/>
         </form>
     <?php endif; ?>
+    <?php if ($task == 'order_track_trace'): ?>
+        <form name="order_form" method="post" action="index.php" class="mt-4">
+            <h4>Order Track & Trace</h4>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">OrderId</label>
+                <div class="col-sm-8">
+                    <input type="text" name="orderId" value="" class="form-control"/>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label">Type</label>
+                <div class="col-sm-8">
+                    <select name="taskType" id="taskType" class="form-control">
+                        <option value="delivery">Delivery</option>
+                        <option value="pickup">Pickup</option>
+                        <option value="all">All</option>
+                    </select>
+                </div>
+            </div>
+            <p class="text-right">
+                <button type="submit" class="btn btn-success">Track & Trace info</button>
+            </p>
+            <input type="hidden" name="task" value="get_order_track_trace"/>
+        </form>
+    <?php endif; ?>
+
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
